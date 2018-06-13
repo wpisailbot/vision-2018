@@ -5,17 +5,7 @@ import hsv_consts
 from hsv_detect import hsv_filt
 import subprocess
 import pdb
-
-# Image sensor exposure time 1-5000
-exposure_time = 2
-# Contrast
-contrast = 60
-# Brightness -64-64
-brightness = 64
-# Saturation 0-128
-saturation = 100
-# gain 0-100
-gain = 0
+import cam_params
 
 # Binary Image filtering
 alpha = 0.75
@@ -30,9 +20,7 @@ def v4l2cmd(params):
 
 def main():
   cam = cv2.VideoCapture(0)
-  v4l2cmd({'exposure_auto':1, 'exposure_absolute':exposure_time,
-           'gain':gain,'saturation':saturation,
-           'brightness':brightness,'contrast':contrast})
+  v4l2cmd(cam_params.cam_params)
 
   accum = np.zeros((480,640),np.float32)
 
