@@ -36,3 +36,17 @@ def hsv_filt_contours(binframe, imgframe, visualize):
         box = np.int0(box)
         cv2.drawContours(imgframe,[box],0,[0,0,255],2)
   return boats
+
+def hsv_filt_buoy_contours(binframe, imgframe, visualize):
+  buoys = []
+  for cnt in cv2.findContours(binframe.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]:
+    # Get the rotated rectangle surrounding the blob
+    ((xcenter,ycenter), (width,height), ang) = cv2.minAreaRect(cnt)
+    # Filter blobs by aspect ratio, area, and bottom 2/3 of image
+    if max(width,height)<1.5*min(width,height):
+      buoys.append((width*height, xcenter))
+      if visualize:
+        box = cv2.cv.BoxPoints(((xcenter,ycenter),(width,height),ang))
+        box = np.int0(box)
+        cv2.drawContours(imgframe,[box],0,[0,0,255],2)
+  return buoys
